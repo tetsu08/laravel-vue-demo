@@ -60,6 +60,12 @@ docker exec api bash /tmp/init.sh
 ```
 http://localhost
 ```
+
+### テストコード実行
+```
+docker exec api php artisan test
+```
+
 ### システム停止
 * Dockerコンテナを終了・除去する
 ```
