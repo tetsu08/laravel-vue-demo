@@ -1,0 +1,42 @@
+version: '3.9'
+volumes:
+  php-fpm-socket:
+  db-data:
+services:
+  app:
+    container_name: api
+    build: ./docker/api
+    volumes:
+      - type: volume
+        source: php-fpm-socket
+        target: /var/run/php-fpm
+      - type: bind
+        source: ./app/laravel
+        target: /var/www/html
+    depends_on:
+      - db
+  web:
+    container_name: nginx
+    build: ./docker/nginx
+    ports:
+      - '80:80'
+    volumes:
+      - type: volume
+        source: php-fpm-socket
+        target: /var/run/php-fpm
+      - type: bind
+        source: ./app/laravel
+        target: /var/www/html
+    depends_on:
+      - app
+  db:
+    container_name: postgresql
+    build: ./docker/postgresql
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'laravel_demo'
+    ports:
+      - '5432:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
