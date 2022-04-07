@@ -16,7 +16,7 @@ class VerifyToken
      */
     public function handle(Request $request, Closure $next)
     {
-        $auth = (new Factory)->withProjectId(Config::get('firebase.project_id'))->createAuth();
+        $auth = (new Factory())->withProjectId(Config::get('firebase.project_id'))->createAuth();
         try {
             $auth->verifyIdToken($request->bearerToken());
         } catch (\Exception $exception) {
